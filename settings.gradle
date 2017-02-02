@@ -1,0 +1,5 @@
+rootProject.name = 'RequestMappingProcessor'
+include 'Processor'
+findProject(':Processor')?.name = 'RequestMappingProcessor'
+include 'App'
+

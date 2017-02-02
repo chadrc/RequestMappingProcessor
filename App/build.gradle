@@ -1,0 +1,35 @@
+group 'com.chadrc.annotations.processors'
+version '1.0'
+
+buildscript {
+    ext {
+        springBootVersion = '1.4.4.RELEASE'
+    }
+    repositories {
+        mavenCentral()
+        mavenLocal()
+    }
+    dependencies {
+        classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
+    }
+}
+
+apply plugin: 'java'
+apply plugin: 'eclipse'
+apply plugin: 'org.springframework.boot'
+
+jar {
+    baseName = 'resourceservice'
+    version = '1.0'
+}
+
+sourceCompatibility = 1.8
+
+repositories {
+    mavenCentral()
+    mavenLocal()
+}
+
+dependencies {
+    compile('org.springframework.boot:spring-boot-starter-web')
+}
