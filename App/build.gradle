@@ -31,5 +31,6 @@ repositories {
 }
 
 dependencies {
+    compileOnly group: "com.chadrc.annotations.processors", name: "RequestMappingProcessor", version: "1.0"
     compile('org.springframework.boot:spring-boot-starter-web')
 }
