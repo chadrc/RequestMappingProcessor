@@ -15,8 +15,9 @@ import javax.lang.model.element.Element;
 import javax.lang.model.element.ElementKind;
 import javax.lang.model.element.TypeElement;
 import javax.tools.JavaFileObject;
-import java.io.IOException;
-import java.io.PrintWriter;
+import java.io.*;
+import java.nio.charset.Charset;
+import java.nio.file.Files;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -72,12 +73,22 @@ public class RequestMappingProcessor extends AbstractProcessor {
                 context.put("className", apiClassName);
                 try {
                     Template template = engine.getTemplate("/APIClass.vm");
-                    JavaFileObject file = processingEnv.getFiler().createSourceFile(apiClassName);
 
-                    PrintWriter writer = new PrintWriter(file.openWriter());
+                    StringWriter writer = new StringWriter();
                     template.merge(context, writer);
                     writer.flush();
                     writer.close();
+
+                    File file = new File("src/api/java/" + apiClassName + ".java");
+                    boolean success = file.getParentFile().mkdirs();
+                    if (success) {
+                        FileOutputStream outputStream = new FileOutputStream(file);
+                        outputStream.write(writer.toString().getBytes());
+                        outputStream.flush();
+                        outputStream.close();
+                    } else {
+                        throw new IOException("Could not create directories in path: " + file.getCanonicalPath());
+                    }
                 } catch (IOException exception) {
                     exception.printStackTrace();
                 }
