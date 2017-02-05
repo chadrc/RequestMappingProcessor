@@ -1,8 +1,10 @@
 package com.chadrc.utils.http;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
+import com.fasterxml.jackson.core.JsonFactory;
+import com.fasterxml.jackson.core.JsonGenerator;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
+import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
@@ -36,8 +38,30 @@ public class ExternalRequest {
         return new Response(responseCode, response.toString());
     }
 
-    public Response Post(Object data) {
-        return null;
+    public Response Post(Object data) throws IOException {
+        URL url = new URL(baseUrl);
+        HttpURLConnection connection = (HttpURLConnection)url.openConnection();
+        connection.setRequestMethod("POST");
+
+        connection.setDoOutput(true);
+        ObjectMapper mapper = new ObjectMapper();
+        String stringData = mapper.writeValueAsString(data);
+        OutputStream outputStream = connection.getOutputStream();
+        outputStream.write(stringData.getBytes());
+
+        int responseCode = connection.getResponseCode();
+        BufferedReader in = new BufferedReader(
+                new InputStreamReader(connection.getInputStream()));
+        String inputLine;
+        StringBuilder response = new StringBuilder();
+
+        while ((inputLine = in.readLine()) != null) {
+            response.append(inputLine);
+        }
+        in.close();
+
+        String responseString = response.toString();
+        return new Response(responseCode, responseString);
     }
 
     public Response Put() {

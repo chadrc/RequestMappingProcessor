@@ -4,6 +4,7 @@
 
 public class ResponseData {
     private String status;
+    private String message;
 
     public ResponseData() {
         super();
@@ -15,5 +16,13 @@ public class ResponseData {
 
     public String getStatus() {
         return status;
+    }
+
+    public String getMessage() {
+        return message;
+    }
+
+    public void setMessage(String message) {
+        this.message = message;
     }
 }

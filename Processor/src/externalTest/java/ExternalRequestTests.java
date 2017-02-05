@@ -15,14 +15,18 @@ public class ExternalRequestTests {
     @Test
     public void testGetRequest() throws IOException {
         ExternalRequest request = new ExternalRequest(TestApiUrl);
-        Response response = null;
-        try {
-            response = request.Get();
-        } catch (IOException exception) {
-            exception.printStackTrace();
-        }
+        Response response = request.Get();
         assertNotNull(response);
         assertEquals(200, response.getCode());
         assertEquals("OK", response.getData(ResponseData.class).getStatus());
+    }
+
+    @Test
+    public void testPostRequest() throws IOException {
+        ExternalRequest request = new ExternalRequest(TestApiUrl);
+        Response response = request.Post(new RequestData("My Message"));
+        assertNotNull(response);
+        assertEquals(200, response.getCode());
+        assertEquals("My Message", response.getData(ResponseData.class).getMessage());
     }
 }

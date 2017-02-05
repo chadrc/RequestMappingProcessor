@@ -2,6 +2,8 @@ package main
 
 import(
 	"net/http"
+	"encoding/json"
+	"io/ioutil"
 )
 
 func main() {
@@ -11,6 +13,14 @@ func main() {
 
 func handlerGenerator(handler RestHandler) func(writer http.ResponseWriter, request *http.Request) {
 	return func(writer http.ResponseWriter, request *http.Request) {
+		//url := request.URL.Path
+		//body, err := ioutil.ReadAll(request.Body)
+		//println("Request URL: ", url)
+		//if err == nil {
+		//	println("Body: ", string(body))
+		//} else {
+		//	println("Body error: ", err.Error())
+		//}
 		var handled bool
 		switch request.Method {
 		case "GET":
@@ -46,13 +56,25 @@ type RootHandler struct {
 
 }
 
+type PostRequest struct {
+	Message string
+}
+
 func (RootHandler) handleGet(writer http.ResponseWriter, request *http.Request) bool {
 	writer.Write([]byte("{\"status\": \"OK\"}"))
 	return true
 }
 
 func (RootHandler) handlePost(writer http.ResponseWriter, request *http.Request) bool {
-	writer.Write([]byte("{\"status\": \"OK\"}"))
+	var requestData PostRequest
+	data, err := ioutil.ReadAll(request.Body)
+	if err != nil {
+		http.Error(writer, "Could not read request body.", http.StatusBadRequest)
+	}
+
+	json.Unmarshal(data, &requestData)
+	writer.Write([]byte("{\"status\": \"OK\", \"message\": \"" +
+		requestData.Message + "\"}"))
 	return true
 }
 
