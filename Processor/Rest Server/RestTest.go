@@ -47,26 +47,26 @@ type RootHandler struct {
 }
 
 func (RootHandler) handleGet(writer http.ResponseWriter, request *http.Request) bool {
-	writer.Write([]byte("{status: 'OK'}"))
+	writer.Write([]byte("{\"status\": \"OK\"}"))
 	return true
 }
 
 func (RootHandler) handlePost(writer http.ResponseWriter, request *http.Request) bool {
-	writer.Write([]byte("{status: 'OK'}"))
+	writer.Write([]byte("{\"status\": \"OK\"}"))
 	return true
 }
 
 func (RootHandler) handlePut(writer http.ResponseWriter, request *http.Request) bool {
-	writer.Write([]byte("{status: 'OK'}"))
+	writer.Write([]byte("{\"status\": \"OK\"}"))
 	return true
 }
 
 func (RootHandler) handleDelete(writer http.ResponseWriter, request *http.Request) bool {
-	writer.Write([]byte("{status: 'OK'}"))
+	writer.Write([]byte("{\"status\": \"OK\"}"))
 	return true
 }
 
 func (RootHandler) handleOptions(writer http.ResponseWriter, request *http.Request) bool {
-	writer.Write([]byte("{status: 'OK'}"))
+	writer.Write([]byte("{\"status\": \"OK\"}"))
 	return true
 }
