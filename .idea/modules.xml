@@ -11,6 +11,7 @@
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/Processor/RequestMappingProcessor-RequestMappingProcessor_external.iml" filepath="$PROJECT_DIR$/.idea/modules/Processor/RequestMappingProcessor-RequestMappingProcessor_external.iml" group="RequestMappingProcessor" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/Processor/RequestMappingProcessor-RequestMappingProcessor_main.iml" filepath="$PROJECT_DIR$/.idea/modules/Processor/RequestMappingProcessor-RequestMappingProcessor_main.iml" group="RequestMappingProcessor" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/Processor/RequestMappingProcessor-RequestMappingProcessor_test.iml" filepath="$PROJECT_DIR$/.idea/modules/Processor/RequestMappingProcessor-RequestMappingProcessor_test.iml" group="RequestMappingProcessor" />
+      <module fileurl="file://$PROJECT_DIR$/Processor/Rest Server/Rest Server.iml" filepath="$PROJECT_DIR$/Processor/Rest Server/Rest Server.iml" />
     </modules>
   </component>
 </project>

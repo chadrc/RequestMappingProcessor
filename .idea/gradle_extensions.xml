@@ -73,8 +73,8 @@
             <ext name="eclipse" type="org.gradle.plugins.ide.eclipse.model.EclipseModel" />
             <ext name="springBoot" type="org.springframework.boot.gradle.SpringBootPluginExtension" />
             <ext name="dependencyManagement" type="io.spring.gradle.dependencymanagement.DependencyManagementExtension" />
-            <prop name="BootRepackage" type="java.lang.Class">class org.springframework.boot.gradle.repackage.RepackageTask</prop>
-            <prop name="springBootVersion">1.4.4.RELEASE</prop>
+            <prop name="BootRepackage" type="java.lang.Class" />
+            <prop name="springBootVersion" />
             <task name="components" type="org.gradle.api.reporting.components.ComponentReport">Displays the components produced by project ':App'. [incubating]&lt;p&gt;&lt;i&gt;Task group: help&lt;i&gt;</task>
             <task name="buildDependents">Assembles and tests this project and all projects that depend on it.&lt;p&gt;&lt;i&gt;Task group: build&lt;i&gt;</task>
             <task name="cleanEclipseClasspath" type="org.gradle.api.tasks.Delete">&lt;i&gt;Task group: other&lt;i&gt;</task>

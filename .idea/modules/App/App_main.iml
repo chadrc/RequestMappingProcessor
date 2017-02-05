@@ -39,9 +39,9 @@
     <orderEntry type="library" name="Gradle: org.slf4j:log4j-over-slf4j:1.7.22" level="project" />
     <orderEntry type="library" name="Gradle: ch.qos.logback:logback-core:1.1.9" level="project" />
     <orderEntry type="library" name="Gradle: org.slf4j:slf4j-api:1.7.22" level="project" />
-    <orderEntry type="library" scope="PROVIDED" name="Gradle: commons-lang:commons-lang:2.4" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Gradle: com.chadrc.annotations.processors:RequestMappingProcessor:1.0" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Gradle: org.apache.velocity:velocity:1.7" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Gradle: commons-collections:commons-collections:3.2.2" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Gradle: commons-lang:commons-lang:2.4" level="project" />
   </component>
 </module>
