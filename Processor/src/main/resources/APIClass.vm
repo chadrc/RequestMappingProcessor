@@ -1,5 +1,5 @@
-package ${info.packageName};
+package ${packageName};
 
-public class ${info.className} {
+public class ${className} {
 
 }

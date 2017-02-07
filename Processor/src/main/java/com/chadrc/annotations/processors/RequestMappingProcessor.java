@@ -78,8 +78,11 @@ public class RequestMappingProcessor extends AbstractProcessor {
             for (String className : classRoots.keySet()) {
                 ClassInfo info = classRoots.get(className);
                 String apiClassName = info.name + "API";
+
                 VelocityContext context = new VelocityContext();
-                context.put("info", info);
+                context.put("className", apiClassName);
+                context.put("packageName", info.packageName);
+
                 try {
                     Template template = engine.getTemplate("/APIClass.vm");
 
@@ -87,11 +90,6 @@ public class RequestMappingProcessor extends AbstractProcessor {
                     template.merge(context, writer);
                     writer.flush();
                     writer.close();
-
-                    File apiFolder = new File("src/api");
-                    if (apiFolder.exists()) {
-                        
-                    }
 
                     String classPath = info.packageName.replace(".", "/");
                     File file = new File("src/api/java/" + classPath + "/" +  apiClassName + ".java");
@@ -111,10 +109,5 @@ public class RequestMappingProcessor extends AbstractProcessor {
         }
 
         return false;
-    }
-
-    class ClassInfo {
-        String name = "";
-        String packageName = "";
     }
 }
