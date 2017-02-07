@@ -1,3 +1,4 @@
+
 group 'com.chadrc.annotations.processors'
 version '1.0'
 
@@ -37,4 +38,14 @@ repositories {
 dependencies {
     compileOnly group: "com.chadrc.annotations.processors", name: "RequestMappingProcessor", version: "1.0"
     compile('org.springframework.boot:spring-boot-starter-web')
+
+    apiCompile group: 'com.mashape.unirest', name: 'unirest-java', version: '1.3.1'
 }
+
+task deleteApi(type: Delete) {
+    delete "src/api"
+}
+
+task fullClean
+fullClean.dependsOn clean
+fullClean.dependsOn deleteApi

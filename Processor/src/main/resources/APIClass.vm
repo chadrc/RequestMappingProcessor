@@ -1,5 +1,5 @@
-package com.chadrc.api;
+package ${info.packageName};
 
-public class ${className} {
+public class ${info.className} {
 
 }
