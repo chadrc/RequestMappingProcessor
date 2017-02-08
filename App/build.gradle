@@ -46,6 +46,4 @@ task deleteApi(type: Delete) {
     delete "src/api"
 }
 
-task fullClean
-fullClean.dependsOn clean
-fullClean.dependsOn deleteApi
+clean.dependsOn deleteApi
