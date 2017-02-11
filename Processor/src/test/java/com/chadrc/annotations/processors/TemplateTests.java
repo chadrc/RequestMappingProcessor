@@ -27,8 +27,13 @@ public class TemplateTests {
 
         String apiClassName = "TestAPI";
 
-        ClassInfo info = new ClassInfo(apiClassName, "com.chadrc.test")
-                .addMethod(new Method("myMethod", "String", "Documentation")
+        ClassInfo info = new ClassInfo(apiClassName, "com.chadrc.test", "/api")
+                .addMethod(new Method(
+                        "myMethod",
+                        "String",
+                        "Documentation",
+                        "GET",
+                        "/endpoint")
                         .addParameter(new Parameter("String", "param1"))
                         .addParameter(new Parameter("String", "param2")));
 

@@ -16,19 +16,20 @@ repositories {
 
 task baseApiJar(type: Jar) {
     from sourceSets.baseApi.allJava
-    baseName "BaseApi"
 }
 
 publishing {
     publications {
         mavenJava(MavenPublication) {
             from components.java
+
         }
 
         mavenBaseApi(MavenPublication) {
-            artifact baseApiJar
             artifactId "base-api"
             groupId "com.chadrc.services.api"
+            version "1.0"
+            artifact baseApiJar
         }
     }
 }

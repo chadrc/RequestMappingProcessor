@@ -3,20 +3,16 @@ package ${info.packageName};
 public class ${info.name} {
 
 #foreach($method in $info.methods)
-
-    static {
-    }
-
-    ${docString}
+    ${method.docString}
     public static ${method.returnType} ${method.name}(#foreach( $parameter in $method.parameters )${parameter.type} ${parameter.name}#if($foreach.hasNext), #end#end) {
-        HttpResponse<$method.returnType} response = Unirest.${method.requestMethod}(${method.requestUrl})
-        #foreach($queryParam in $method.params)
-        .queryString("${queryParam}", ${queryParam})
-        #end
-        #if($hasBody)
-        .body(${body})
-        #end
-        .asObject(${method.returnType}.class);
+        HttpResponse<${method.returnType}> response = Unirest.${method.requestMethod}("${method.requestUrl}")
+#foreach($param in $method.parameters)
+            .queryString("${param.name}", ${param.name})
+#end
+#if($method.hasBody)
+            .body(${method.body})
+#end
+            .asObject(${method.returnType}.class);
     }
 #end
 }
