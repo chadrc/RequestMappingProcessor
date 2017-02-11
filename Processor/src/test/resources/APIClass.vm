@@ -1,7 +1,6 @@
 package ${info.packageName};
 
 public class ${info.name} {
-
 #foreach($method in $info.methods)
 #set($async = false)
 #parse( "RequestFunction.vm" )
