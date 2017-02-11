@@ -8,9 +8,10 @@ import org.springframework.web.bind.annotation.RestController;
  */
 
 @RestController
+@RequestMapping("/api")
 public class RootController {
 
-    @RequestMapping("/")
+    @RequestMapping("/root")
     public String RootRequest() {
         return "App Ready";
     }

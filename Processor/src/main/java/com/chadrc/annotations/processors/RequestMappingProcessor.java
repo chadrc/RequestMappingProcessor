@@ -53,61 +53,57 @@ public class RequestMappingProcessor extends AbstractProcessor {
             List<Element> methods = annotatedMethods.get(true);
             Map<String, ClassInfo> classRoots = new HashMap<>();
 
-//            for (Element element : classes) {
-//                String className = element.getSimpleName().toString();
-//                if (!classRoots.containsKey(className)) {
-//                    ClassInfo info = new ClassInfo();
-//                    info.name = className;
-//                    classRoots.put(className, info);
-//                }
-//            }
-//
-//            for (Element element : methods) {
-//                String className = ((TypeElement) element.getEnclosingElement()).getQualifiedName().toString();
-//                if (!classRoots.containsKey(className)) {
-//                    ClassInfo info = new ClassInfo();
-//                    int lastDot = className.lastIndexOf(".");
-//                    if (lastDot > 0) {
-//                        info.name = className.substring(lastDot+1);
-//                        info.packageName = className.substring(0, lastDot);
-//                    }
-//                    classRoots.put(className, info);
-//                }
-//            }
-//
-//            for (String className : classRoots.keySet()) {
-//                ClassInfo info = classRoots.get(className);
-//                String apiClassName = info.name + "API";
-//
-//                VelocityContext context = new VelocityContext();
-//                context.put("className", apiClassName);
-//                context.put("packageName", info.packageName);
-//
-//                try {
-//                    Template template = engine.getTemplate("/APIClass.vm");
-//
-//                    StringWriter writer = new StringWriter();
-//                    template.merge(context, writer);
-//                    writer.flush();
-//                    writer.close();
-//
-//                    String classPath = info.packageName.replace(".", "/");
-//                    File file = new File("src/api/java/" + classPath + "/" +  apiClassName + ".java");
-//                    boolean success = file.getParentFile().mkdirs();
-//                    if (success) {
-//                        FileOutputStream outputStream = new FileOutputStream(file);
-//                        outputStream.write(writer.toString().getBytes());
-//                        outputStream.flush();
-//                        outputStream.close();
-//                    } else {
-//                        throw new IOException("Could not create directories in path: " + file.getCanonicalPath());
-//                    }
-//                } catch (IOException exception) {
-//                    exception.printStackTrace();
-//                }
-//            }
+            for (Element element : classes) {
+                AddClassToMap(classRoots, (TypeElement)element);
+            }
+
+            for (Element element : methods) {
+                AddClassToMap(classRoots, ((TypeElement) element.getEnclosingElement()));
+            }
+
+            for (String className : classRoots.keySet()) {
+                ClassInfo info = classRoots.get(className);
+
+                VelocityContext context = new VelocityContext();
+                context.put("info", info);
+
+                try {
+                    Template template = engine.getTemplate("/APIClass.vm");
+
+                    StringWriter writer = new StringWriter();
+                    template.merge(context, writer);
+                    writer.flush();
+                    writer.close();
+
+                    String classPath = info.getPackageName().replace(".", "/");
+                    File file = new File("src/api/java/" + classPath + "/" +  info.getName() + ".java");
+                    boolean success = file.getParentFile().mkdirs();
+                    if (success) {
+                        FileOutputStream outputStream = new FileOutputStream(file);
+                        outputStream.write(writer.toString().getBytes());
+                        outputStream.flush();
+                        outputStream.close();
+                    } else {
+                        throw new IOException("Could not create directories in path: " + file.getCanonicalPath());
+                    }
+                } catch (IOException exception) {
+                    exception.printStackTrace();
+                }
+            }
         }
 
         return false;
+    }
+
+    private void AddClassToMap(Map<String, ClassInfo> classRoots, TypeElement element) {
+        String className = element.getSimpleName().toString();
+        if (!classRoots.containsKey(className)) {
+            if (!classRoots.containsKey(className)) {
+                int lastDot = element.getQualifiedName().toString().lastIndexOf(".");
+                String packageName = element.getQualifiedName().toString().substring(0, lastDot);
+                ClassInfo info = new ClassInfo(className, packageName, "");
+                classRoots.put(className, info);
+            }
+        }
     }
 }
