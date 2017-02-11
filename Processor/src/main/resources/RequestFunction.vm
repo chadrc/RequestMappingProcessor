@@ -1,6 +1,11 @@
     ${method.docString}
-    public static HttpResponse<${method.returnType}> ${method.name}#if($async)Async#end(#foreach( $parameter in $method.parameters )${parameter.type} ${parameter.name}#if($foreach.hasNext), #end#end#if($async), Callback<${method.returnType}> callback#end) {
-        HttpResponse<${method.returnType}> response = Unirest.${method.requestMethod.toLowerCase()}("${method.requestUrl}")
+#if($async)
+#set($returnType = "Future<HttpResponse<${method.returnType}>>")
+#else
+#set($returnType = "HttpResponse<${method.returnType}>")
+#end
+    public static ${returnType} ${method.name}#if($async)Async#end(#foreach( $parameter in $method.parameters )${parameter.type} ${parameter.name}#if($foreach.hasNext), #end#end#if($async), Callback<${method.returnType}> callback#end) {
+        ${returnType} response = Unirest.${method.requestMethod.toLowerCase()}("${method.requestUrl}")
 #foreach($param in $method.routeParams)
             .routeParam("${param.varName}", ${param.name})
 #end
