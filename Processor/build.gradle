@@ -15,20 +15,34 @@ repositories {
 }
 
 task baseApiJar(type: Jar) {
-    from sourceSets.baseApi.allJava
+    baseName "baseApi"
+    from sourceSets.baseApi.java
 }
+baseApiJar.dependsOn baseApiClasses
 
 publishing {
     publications {
         mavenJava(MavenPublication) {
             from components.java
-
         }
 
         mavenBaseApi(MavenPublication) {
             artifactId "base-api"
             groupId "com.chadrc.services.api"
             version "1.0"
+
+            pom.withXml {
+                def depRoot = asNode().appendNode("dependencies")
+                configurations.baseApiCompile.dependencies.each {
+                    def dep = depRoot.appendNode("dependency")
+                    dep.appendNode("groupId").setValue(it.group)
+                    dep.appendNode("artifactId").setValue(it.name)
+                    dep.appendNode("version", it.version)
+                    dep.appendNode("type", "jar")
+                    dep.appendNode("scope", "compile")
+                    dep.appendNode("optional", "false")
+                }
+            }
             artifact baseApiJar
         }
     }
