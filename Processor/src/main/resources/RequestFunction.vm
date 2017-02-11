@@ -15,11 +15,7 @@
 #if($method.hasBody)
             .body(${method.bodyVar})
 #end
-#if($async)
-            .asObjectAsync(${method.returnType}.class, callback);
-#else
-            .asObject(${method.returnType}.class);
-#end
+            .asObject#if($async)Async#end(${method.returnType}.class#if($async), callback#end);
 
         return response;
     }
