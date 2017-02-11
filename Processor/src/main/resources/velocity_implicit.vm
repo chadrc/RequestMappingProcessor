@@ -1,3 +1,4 @@
 #* @implicitly included *#
 #* @vtlvariable name="info" type="com.chadrc.annotations.processors.ClassInfo" *#
 #* @vtlvariable name="method" type="com.chadrc.annotations.processors.Method" *#
+#* @vtlvariable name="async" type="boolean" *#

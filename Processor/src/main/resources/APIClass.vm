@@ -1,7 +1,13 @@
-package ${packageName};
+package ${info.packageName};
 
-public class ${className} {
-    public static ${returnType} ${methodName}(#foreach($parameter in $parameters)${foreach.count} ${parameter.type} ${parameter.name} #end) {
+public class ${info.name} {
+#foreach($method in $info.methods)
+#set($async = false)
+#parse( "RequestFunction.vm" )
 
-    }
+
+#set($async = true)
+#parse( "RequestFunction.vm" )
+#end
+
 }
