@@ -56,4 +56,25 @@ public class Method {
     public List<Parameter> getParameters() {
         return parameters;
     }
+
+    public List<Parameter> getQueryParams() {
+        List<Parameter> queryParams = new ArrayList<>();
+        queryParams.add(parameters.get(0));
+        queryParams.add(parameters.get(1));
+        return queryParams;
+    }
+
+    public List<Parameter> getRouteParams() {
+        List<Parameter> routeParams = new ArrayList<>();
+        routeParams.add(parameters.get(2));
+        return routeParams;
+    }
+
+    public boolean getHasBody() {
+        return true;
+    }
+
+    public String getBodyVar() {
+        return parameters.get(parameters.size()-1).getName();
+    }
 }

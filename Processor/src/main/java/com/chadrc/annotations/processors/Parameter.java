@@ -7,10 +7,16 @@ package com.chadrc.annotations.processors;
 public class Parameter {
     private String type;
     private String name;
+    private String varName;
 
     Parameter(String type, String name) {
+        this(type, name, name);
+    }
+
+    Parameter(String type, String name, String varName) {
         this.type = type;
         this.name = name;
+        this.varName = varName;
     }
 
     public String getType() {
@@ -19,5 +25,9 @@ public class Parameter {
 
     public String getName() {
         return this.name;
+    }
+
+    public String getVarName() {
+        return this.varName;
     }
 }

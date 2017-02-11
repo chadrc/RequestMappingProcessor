@@ -33,18 +33,14 @@ public class TemplateTests {
                         "String",
                         "Documentation",
                         "GET",
-                        "/endpoint")
+                        "/endpoint/{routeName}")
                         .addParameter(new Parameter("String", "param1"))
-                        .addParameter(new Parameter("String", "param2")));
+                        .addParameter(new Parameter("String", "param2"))
+                        .addParameter(new Parameter("Integer", "num", "routeName"))
+                        .addParameter(new Parameter("BodyClass", "requestBody")));
 
         VelocityContext context = new VelocityContext();
         context.put("info", info);
-
-        List<Parameter> parameters = new ArrayList<>();
-        parameters.add(new Parameter("String", "param1"));
-        parameters.add(new Parameter("String", "param2"));
-
-        context.put("parameters", parameters);
 
         Template template = engine.getTemplate("/APIClass.vm");
 

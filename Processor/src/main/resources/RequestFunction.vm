@@ -1,0 +1,21 @@
+    ${method.docString}
+    public static HttpResponse<${method.returnType}> ${method.name}(#foreach( $parameter in $method.parameters )${parameter.type} ${parameter.name}#if($foreach.hasNext), #end#end#if($async), Callback<${method.returnType}> callback#end) {
+        HttpResponse<${method.returnType}> response = Unirest.${method.requestMethod.toLowerCase()}("${method.requestUrl}")
+#foreach($param in $method.routeParams)
+            .routeParam("${param.varName}", ${param.name})
+#end
+#foreach($param in $method.queryParams)
+            .queryString("${param.varName}", ${param.name})
+#end
+#if($method.hasBody)
+            .body(${method.bodyVar})
+#end
+#if($async)
+            .asObjectAsync(${method.returnType}.class, callback);
+#else
+            .asObject(${method.returnType}.class);
+#end
+
+        return response;
+    }
+#* Intentional extra line *#
