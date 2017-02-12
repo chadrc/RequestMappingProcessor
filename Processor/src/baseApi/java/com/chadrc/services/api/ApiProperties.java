@@ -9,20 +9,17 @@ import java.util.Properties;
  */
 public class ApiProperties {
     private static Properties properties = new Properties();
-    private static boolean loaded = false;
-    public ApiProperties() {}
+    private ApiProperties() {}
 
-    private static void loadPropertiesFromClassPath() {
-        if (loaded) return;
+    static {
         InputStream input = null;
         try {
-            String filename = "request-mapping-processor.properties";
+            String filename = "application.properties";
             input = ApiProperties.class.getClassLoader().getResourceAsStream(filename);
             if(input==null){
                 System.out.println("Sorry, unable to find " + filename);
             }
             properties.load(input);
-            loaded = true;
         } catch (IOException ex) {
             // Couldn't load properties file
         } finally {
@@ -36,8 +33,7 @@ public class ApiProperties {
         }
     }
 
-    public static String getRootUrl() {
-        loadPropertiesFromClassPath();
-        return properties.getProperty("rootUrl");
+    public static String getRootUrl(String name) {
+        return properties.getProperty(name + ".rootUrl");
     }
 }
