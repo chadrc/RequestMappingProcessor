@@ -1,17 +1,18 @@
 package com.chadrc.annotations.processors;
 
+import org.apache.commons.lang.StringUtils;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import javax.lang.model.element.Element;
 import javax.lang.model.element.ExecutableElement;
+import javax.lang.model.element.TypeElement;
 import javax.lang.model.element.VariableElement;
 import javax.lang.model.type.DeclaredType;
 import javax.lang.model.type.TypeKind;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 
 /**
  * Created by chad on 2/7/17.
@@ -42,6 +43,7 @@ public class Method {
     private List<Parameter> routeParams = new ArrayList<>();
     private List<Parameter> fields = new ArrayList<>();
     private ClassInfo classInfo;
+    private Collection<String> classRegister = new HashSet<>();
 
     public Method(String name, String returnType, String docString, String requestMethod, String url) {
         this.name = name;
@@ -57,7 +59,9 @@ public class Method {
         this.docString = "";
         if (supportedTypes.contains(element.getReturnType().getKind())) {
             if (element.getReturnType() instanceof DeclaredType) {
-                this.returnType = ((DeclaredType)element.getReturnType()).asElement().getSimpleName().toString();
+                TypeElement typeElement = (TypeElement)((DeclaredType)element.getReturnType()).asElement();
+                this.returnType = typeElement.getSimpleName().toString();
+                classRegister.add(typeElement.getQualifiedName().toString());
             } else {
                 System.out.println("Could not case return type: " + element.getReturnType().toString());
             }
@@ -78,7 +82,8 @@ public class Method {
 
         for (VariableElement variableElement : element.getParameters()) {
             String name = variableElement.getSimpleName().toString();
-            String type = ((DeclaredType)variableElement.asType()).asElement().getSimpleName().toString();
+            TypeElement typeElement = (TypeElement)((DeclaredType)variableElement.asType()).asElement();
+            String type = typeElement.getSimpleName().toString();
             String varName = name;
             List<Parameter> elementList = fields;
             PathVariable pathVariable = variableElement.getAnnotation(PathVariable.class);
@@ -94,6 +99,10 @@ public class Method {
                 elementList = null;
             }
 
+            if (StringUtils.isBlank(varName)) {
+                varName = name;
+            }
+
             Parameter parameter = new Parameter(type, name, varName);
             if (elementList != null) {
                 elementList.add(parameter);
@@ -101,6 +110,7 @@ public class Method {
                 bodyParameter = parameter;
             }
             parameters.add(parameter);
+            classRegister.add(typeElement.getQualifiedName().toString());
         }
     }
 
@@ -111,6 +121,10 @@ public class Method {
 
     void setClassInfo(ClassInfo info) {
         this.classInfo = info;
+    }
+
+    Collection<String> getClassRegister() {
+        return this.classRegister;
     }
 
     public String getDocString() {

@@ -28,6 +28,7 @@ sourceCompatibility = 1.8
 
 sourceSets {
     api
+    shared
 }
 
 repositories {
@@ -38,8 +39,10 @@ repositories {
 dependencies {
     compileOnly group: "com.chadrc.annotations.processors", name: "RequestMappingProcessor", version: "1.0"
     compile('org.springframework.boot:spring-boot-starter-web')
+    compile sourceSets.shared.output
 
     apiCompile group: "com.chadrc.services.api", name: "base-api", version: "1.0"
+    apiCompile sourceSets.shared.output
 }
 
 task deleteApi(type: Delete) {

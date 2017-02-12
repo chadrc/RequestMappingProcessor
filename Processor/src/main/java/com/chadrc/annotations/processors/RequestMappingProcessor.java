@@ -5,6 +5,7 @@ import org.apache.velocity.VelocityContext;
 import org.apache.velocity.app.VelocityEngine;
 import org.apache.velocity.runtime.RuntimeConstants;
 import org.apache.velocity.runtime.resource.loader.ClasspathResourceLoader;
+import org.apache.velocity.util.StringUtils;
 
 import javax.annotation.processing.AbstractProcessor;
 import javax.annotation.processing.RoundEnvironment;
@@ -60,7 +61,8 @@ public class RequestMappingProcessor extends AbstractProcessor {
 
             for (Element element : methods) {
                 String name = AddClassToMap(classRoots, ((TypeElement) element.getEnclosingElement()));
-                classRoots.get(name).addMethod(new Method((ExecutableElement) element));
+                Method method = new Method((ExecutableElement) element);
+                classRoots.get(name).addMethod(method);
             }
 
             for (String className : classRoots.keySet()) {

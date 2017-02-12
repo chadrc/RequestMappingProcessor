@@ -1,4 +1,4 @@
-package com.chadrc.test;
+package com.chadrc.test.models;
 
 /**
  * Created by chad on 2/11/17.

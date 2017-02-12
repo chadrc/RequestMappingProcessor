@@ -1,4 +1,6 @@
-package com.chadrc.test;
+package com.chadrc.test.models.responses;
+
+import com.chadrc.test.models.User;
 
 /**
  * Created by chad on 2/11/17.

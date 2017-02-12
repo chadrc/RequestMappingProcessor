@@ -3,9 +3,11 @@ package com.chadrc.annotations.processors;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import javax.lang.model.element.TypeElement;
-import java.lang.annotation.Annotation;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashSet;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Created by chad on 2/6/17.
@@ -16,6 +18,7 @@ public class ClassInfo {
     private String packageName;
     private String baseUrl;
     private List<Method> methods = new ArrayList<>();
+    private Collection<String> imports = new HashSet<>();
 
     public ClassInfo(TypeElement element) {
         String className = element.getSimpleName().toString();
@@ -36,6 +39,10 @@ public class ClassInfo {
     public ClassInfo addMethod(Method method) {
         methods.add(method);
         method.setClassInfo(this);
+        imports.addAll(method.getClassRegister().stream()
+                .filter(item -> !item.startsWith("java."))
+                .collect(Collectors.toList())
+        );
         return this;
     }
 
@@ -53,6 +60,10 @@ public class ClassInfo {
 
     public List<Method> getMethods() {
         return methods;
+    }
+
+    public Collection<String> getImports() {
+        return imports;
     }
 
     private void setFields(String name, String packageName, String baseUrl) {
