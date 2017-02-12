@@ -2,4 +2,6 @@ rootProject.name = 'RequestMappingProcessor'
 include 'Processor'
 findProject(':Processor')?.name = 'RequestMappingProcessor'
 include 'App'
+include 'Client'
+findProject(':Client')?.name = 'client'
 
