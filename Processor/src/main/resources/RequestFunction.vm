@@ -12,6 +12,9 @@
 #foreach($param in $method.queryParams)
             .queryString("${param.varName}", ${param.name})
 #end
+#foreach($field in $method.fields)
+            .field("${field.varName}", ${field.name})
+#end
 #if($method.hasBody)
             .body(${method.bodyVar})
 #end

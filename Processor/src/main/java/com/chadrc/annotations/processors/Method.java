@@ -1,8 +1,12 @@
 package com.chadrc.annotations.processors;
 
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.lang.model.element.ExecutableElement;
+import javax.lang.model.element.VariableElement;
 import javax.lang.model.type.DeclaredType;
 import javax.lang.model.type.TypeKind;
 import java.util.ArrayList;
@@ -32,7 +36,11 @@ public class Method {
     private String docString;
     private String requestMethod;
     private String url;
+    private Parameter bodyParameter = null;
     private List<Parameter> parameters = new ArrayList<>();
+    private List<Parameter> queryParams = new ArrayList<>();
+    private List<Parameter> routeParams = new ArrayList<>();
+    private List<Parameter> fields = new ArrayList<>();
     private ClassInfo classInfo;
 
     public Method(String name, String returnType, String docString, String requestMethod, String url) {
@@ -66,6 +74,33 @@ public class Method {
             if (mapping.method().length > 0) {
                 this.requestMethod = mapping.method()[0].toString();
             }
+        }
+
+        for (VariableElement variableElement : element.getParameters()) {
+            String name = variableElement.getSimpleName().toString();
+            String type = ((DeclaredType)variableElement.asType()).asElement().getSimpleName().toString();
+            String varName = name;
+            List<Parameter> elementList = fields;
+            PathVariable pathVariable = variableElement.getAnnotation(PathVariable.class);
+            RequestParam requestParam = variableElement.getAnnotation(RequestParam.class);
+            RequestBody requestBody = variableElement.getAnnotation(RequestBody.class);
+            if (pathVariable != null) {
+                varName = pathVariable.name();
+                elementList = routeParams;
+            } else if (requestParam != null) {
+                varName = requestParam.name();
+                elementList = queryParams;
+            } else if (requestBody != null) {
+                elementList = null;
+            }
+
+            Parameter parameter = new Parameter(type, name, varName);
+            if (elementList != null) {
+                elementList.add(parameter);
+            } else {
+                bodyParameter = parameter;
+            }
+            parameters.add(parameter);
         }
     }
 
@@ -103,20 +138,22 @@ public class Method {
     }
 
     public List<Parameter> getQueryParams() {
-        List<Parameter> queryParams = new ArrayList<>();
         return queryParams;
     }
 
     public List<Parameter> getRouteParams() {
-        List<Parameter> routeParams = new ArrayList<>();
         return routeParams;
     }
 
+    public List<Parameter> getFields() {
+        return fields;
+    }
+
     public boolean getHasBody() {
-        return false;
+        return bodyParameter != null;
     }
 
     public String getBodyVar() {
-        return "";
+        return bodyParameter.getName();
     }
 }
