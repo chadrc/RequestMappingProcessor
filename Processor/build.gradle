@@ -29,8 +29,7 @@ repositories {
 }
 
 task baseApiJar(type: Jar) {
-    baseName "baseApi"
-    from sourceSets.baseApi.java
+    from sourceSets.baseApi.output
 }
 baseApiJar.dependsOn baseApiClasses
 
@@ -52,9 +51,6 @@ publishing {
                     dep.appendNode("groupId").setValue(it.group)
                     dep.appendNode("artifactId").setValue(it.name)
                     dep.appendNode("version", it.version)
-                    dep.appendNode("type", "jar")
-                    dep.appendNode("scope", "compile")
-                    dep.appendNode("optional", "false")
                 }
             }
             artifact baseApiJar
