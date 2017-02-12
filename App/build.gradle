@@ -18,6 +18,7 @@ buildscript {
 apply plugin: 'java'
 apply plugin: 'eclipse'
 apply plugin: 'org.springframework.boot'
+apply plugin: 'maven-publish'
 
 jar {
     baseName = 'testapi'
@@ -29,6 +30,35 @@ sourceCompatibility = 1.8
 sourceSets {
     api
     shared
+}
+
+task apiJar(type: Jar) {
+    from sourceSets.api.output, sourceSets.shared.output
+}
+
+publishing {
+    publications {
+        mavenApi(MavenPublication) {
+            artifactId = 'testapi'
+            groupId = group
+            version = version
+
+            pom.withXml {
+                def depRoot = asNode().appendNode("dependencies")
+                configurations.apiCompile.dependencies.each {
+                    if (it.group == null || it.name == null || it.version == null) {
+                        return
+                    }
+                    def dep = depRoot.appendNode("dependency")
+                    dep.appendNode("groupId").setValue(it.group)
+                    dep.appendNode("artifactId").setValue(it.name)
+                    dep.appendNode("version", it.version)
+                }
+            }
+
+            artifact apiJar
+        }
+    }
 }
 
 repositories {
