@@ -23,8 +23,8 @@ while true; do
     if [ "$?" != "7" ]; then
         echo "Connection made"
         cd ../Client
-        echo "Executing :Client:run..."
-        ../gradlew -q :Client:run
+        echo "Executing :Client:test..."
+        ../gradlew :Client:test
         break
     elif [ "$SECONDS" -ge "10" ]; then
         echo "Connection timeout"

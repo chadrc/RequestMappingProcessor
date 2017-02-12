@@ -11,4 +11,8 @@ public class UserResponse {
     public UserResponse(User user) {
         this.userName = user.getUserName();
     }
+
+    public String getUserName() {
+        return userName;
+    }
 }
