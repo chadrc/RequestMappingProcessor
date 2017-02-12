@@ -1,5 +1,12 @@
 package ${info.packageName};
 
+import com.mashape.unirest.http.HttpResponse;
+import com.mashape.unirest.http.Unirest;
+import com.mashape.unirest.http.async.Callback;
+import com.mashape.unirest.http.exceptions.UnirestException;
+
+import java.util.concurrent.Future;
+
 public class ${info.name} {
 #foreach($method in $info.methods)
 #set($async = false)

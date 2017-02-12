@@ -1,6 +1,12 @@
 package com.chadrc.annotations.processors;
 
+import org.springframework.web.bind.annotation.RequestMapping;
+
+import javax.lang.model.element.ExecutableElement;
+import javax.lang.model.type.DeclaredType;
+import javax.lang.model.type.TypeKind;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -8,6 +14,19 @@ import java.util.List;
  */
 
 public class Method {
+    private static List<TypeKind> supportedTypes = Arrays.asList(
+            TypeKind.BOOLEAN,
+            TypeKind.BYTE,
+            TypeKind.CHAR,
+            TypeKind.SHORT,
+            TypeKind.INT,
+            TypeKind.LONG,
+            TypeKind.FLOAT,
+            TypeKind.DOUBLE,
+            TypeKind.VOID,
+            TypeKind.DECLARED
+    );
+
     private String name;
     private String returnType;
     private String docString;
@@ -22,6 +41,32 @@ public class Method {
         this.docString = docString;
         this.requestMethod = requestMethod;
         this.url = url;
+    }
+
+    public Method(ExecutableElement element) {
+        this.name = element.getSimpleName().toString();
+        this.returnType = "";
+        this.docString = "";
+        if (supportedTypes.contains(element.getReturnType().getKind())) {
+            if (element.getReturnType() instanceof DeclaredType) {
+                this.returnType = ((DeclaredType)element.getReturnType()).asElement().getSimpleName().toString();
+            } else {
+                System.out.println("Could not case return type: " + element.getReturnType().toString());
+            }
+        }
+
+        RequestMapping mapping = element.getAnnotation(RequestMapping.class);
+        this.url = "";
+        this.requestMethod = "get";
+        if (mapping != null) {
+            if (mapping.path().length > 0) {
+                this.url = mapping.path()[0];
+            }
+
+            if (mapping.method().length > 0) {
+                this.requestMethod = mapping.method()[0].toString();
+            }
+        }
     }
 
     public Method addParameter(Parameter parameter) {
@@ -59,22 +104,19 @@ public class Method {
 
     public List<Parameter> getQueryParams() {
         List<Parameter> queryParams = new ArrayList<>();
-        queryParams.add(parameters.get(0));
-        queryParams.add(parameters.get(1));
         return queryParams;
     }
 
     public List<Parameter> getRouteParams() {
         List<Parameter> routeParams = new ArrayList<>();
-        routeParams.add(parameters.get(2));
         return routeParams;
     }
 
     public boolean getHasBody() {
-        return true;
+        return false;
     }
 
     public String getBodyVar() {
-        return parameters.get(parameters.size()-1).getName();
+        return "";
     }
 }

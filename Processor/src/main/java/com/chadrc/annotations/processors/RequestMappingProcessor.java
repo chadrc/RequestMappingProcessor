@@ -13,6 +13,7 @@ import javax.annotation.processing.SupportedSourceVersion;
 import javax.lang.model.SourceVersion;
 import javax.lang.model.element.Element;
 import javax.lang.model.element.ElementKind;
+import javax.lang.model.element.ExecutableElement;
 import javax.lang.model.element.TypeElement;
 import javax.tools.JavaFileObject;
 import java.io.*;
@@ -58,7 +59,8 @@ public class RequestMappingProcessor extends AbstractProcessor {
             }
 
             for (Element element : methods) {
-                AddClassToMap(classRoots, ((TypeElement) element.getEnclosingElement()));
+                String name = AddClassToMap(classRoots, ((TypeElement) element.getEnclosingElement()));
+                classRoots.get(name).addMethod(new Method((ExecutableElement) element));
             }
 
             for (String className : classRoots.keySet()) {
@@ -67,43 +69,73 @@ public class RequestMappingProcessor extends AbstractProcessor {
                 VelocityContext context = new VelocityContext();
                 context.put("info", info);
 
+                Template template = engine.getTemplate("/APIClass.vm");
+
+                StringWriter writer = new StringWriter();
+                template.merge(context, writer);
+
+                String classPath = info.getPackageName().replace(".", "/");
+                File folder = new File("src/api/java/" + classPath);
+                if (!folder.exists()) {
+                    boolean created = folder.mkdir();
+                    System.out.println("Folder made: " + created);
+                }
+                File file = new File(folder.getAbsolutePath() + "/" + info.getName() + ".java");
+                if (file.exists()) {
+                    boolean deleted = file.delete();
+                    System.out.println("File removed: " + deleted);
+                }
+
+                FileOutputStream outputStream = null;
                 try {
-                    Template template = engine.getTemplate("/APIClass.vm");
-
-                    StringWriter writer = new StringWriter();
-                    template.merge(context, writer);
-                    writer.flush();
-                    writer.close();
-
-                    String classPath = info.getPackageName().replace(".", "/");
-                    File file = new File("src/api/java/" + classPath + "/" +  info.getName() + ".java");
-                    boolean success = file.getParentFile().mkdirs();
-                    if (success) {
-                        FileOutputStream outputStream = new FileOutputStream(file);
-                        outputStream.write(writer.toString().getBytes());
-                        outputStream.flush();
-                        outputStream.close();
-                    } else {
-                        throw new IOException("Could not create directories in path: " + file.getCanonicalPath());
-                    }
-                } catch (IOException exception) {
-                    exception.printStackTrace();
+                    outputStream = new FileOutputStream(file);
+                    outputStream.write(writer.toString().getBytes());
+                    outputStream.flush();
+                    outputStream.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
                 }
             }
+
+//            for (String className : classRoots.keySet()) {
+//                ClassInfo info = classRoots.get(className);
+//
+//                VelocityContext context = new VelocityContext();
+//                context.put("info", info);
+//
+//                try {
+//                    Template template = engine.getTemplate("/APIClass.vm");
+//
+//                    StringWriter writer = new StringWriter();
+//                    template.merge(context, writer);
+//                    writer.flush();
+//                    writer.close();
+//
+//                    String classPath = info.getPackageName().replace(".", "/");
+//                    File file = new File("src/api/java/" + classPath + "/" +  info.getName() + ".java");
+//                    boolean success = file.getParentFile().mkdirs();
+//                    if (success) {
+//                        FileOutputStream outputStream = new FileOutputStream(file);
+//                        outputStream.write(writer.toString().getBytes());
+//                        outputStream.flush();
+//                        outputStream.close();
+//                    } else {
+//                        //throw new IOException("Could not create directories in path: " + file.getCanonicalPath());
+//                    }
+//                } catch (IOException exception) {
+//                    exception.printStackTrace();
+//                }
+//            }
         }
 
         return false;
     }
 
-    private void AddClassToMap(Map<String, ClassInfo> classRoots, TypeElement element) {
+    private String AddClassToMap(Map<String, ClassInfo> classRoots, TypeElement element) {
         String className = element.getSimpleName().toString();
         if (!classRoots.containsKey(className)) {
-            if (!classRoots.containsKey(className)) {
-                int lastDot = element.getQualifiedName().toString().lastIndexOf(".");
-                String packageName = element.getQualifiedName().toString().substring(0, lastDot);
-                ClassInfo info = new ClassInfo(className, packageName, "");
-                classRoots.put(className, info);
-            }
+                classRoots.put(className, new ClassInfo(element));
         }
+        return className;
     }
 }
