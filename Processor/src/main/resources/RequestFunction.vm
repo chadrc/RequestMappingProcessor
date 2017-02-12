@@ -6,6 +6,9 @@
 #if($method.docString != "")    ${method.docString}#end
     public static ${returnType} ${method.name}#if($async)Async#end(#foreach( $parameter in $method.parameters )${parameter.type} ${parameter.name}#if($foreach.hasNext || $async), #end#end#if($async)Callback<${method.returnType}> callback#end) #if(!$async)throws UnirestException #end{
         return Unirest.${method.requestMethod.toLowerCase()}(ApiProperties.getRootUrl("${info.packageName}.${info.name}") + "${method.requestUrl}")
+#if($method.hasBody)
+            .header("Content-Type", "application/json")
+#end
 #foreach($param in $method.routeParams)
             .routeParam("${param.varName}", ${param.name})
 #end

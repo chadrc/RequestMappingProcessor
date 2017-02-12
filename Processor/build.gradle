@@ -36,6 +36,7 @@ baseApiJar.dependsOn baseApiClasses
 publishing {
     publications {
         mavenJava(MavenPublication) {
+            artifactId "RequestMappingProcessor"
             from components.java
         }
 
