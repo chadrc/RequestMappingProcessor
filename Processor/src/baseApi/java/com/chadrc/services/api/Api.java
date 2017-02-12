@@ -9,11 +9,14 @@ import java.io.IOException;
 /**
  * Created by chad on 2/10/17.
  */
-public class ApiSetup {
+public class Api {
 
-    private ApiSetup() {}
+    private static boolean hasBeenSetup = false;
 
-    static {
+    private Api() {}
+
+    public static void Setup() {
+        if (hasBeenSetup) return;
         Unirest.setObjectMapper(new ObjectMapper() {
             private com.fasterxml.jackson.databind.ObjectMapper jacksonObjectMapper
                     = new com.fasterxml.jackson.databind.ObjectMapper();
@@ -34,5 +37,6 @@ public class ApiSetup {
                 }
             }
         });
+        hasBeenSetup = true;
     }
 }

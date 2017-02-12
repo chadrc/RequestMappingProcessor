@@ -1,9 +1,11 @@
 package com.chadrc.test;
 
+import com.chadrc.services.api.Api;
 import com.chadrc.test.models.User;
 import com.chadrc.test.models.responses.LoginResponse;
 import com.chadrc.test.models.responses.UserResponse;
 import com.mashape.unirest.http.exceptions.UnirestException;
+import org.junit.BeforeClass;
 import org.junit.Test;
 import static org.junit.Assert.*;
 
@@ -11,6 +13,11 @@ import static org.junit.Assert.*;
  * Created by chad on 2/12/17.
  */
 public class AppTests {
+
+    @BeforeClass
+    public static void setup() {
+        Api.Setup();
+    }
 
     @Test
     public void testRoot() throws UnirestException {
