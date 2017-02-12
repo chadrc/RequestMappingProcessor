@@ -1,4 +1,4 @@
-package com.chadrc.services;
+package com.chadrc.services.api;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.mashape.unirest.http.ObjectMapper;
@@ -10,6 +10,9 @@ import java.io.IOException;
  * Created by chad on 2/10/17.
  */
 public class ApiSetup {
+
+    private ApiSetup() {}
+
     static {
         Unirest.setObjectMapper(new ObjectMapper() {
             private com.fasterxml.jackson.databind.ObjectMapper jacksonObjectMapper
@@ -31,9 +34,5 @@ public class ApiSetup {
                 }
             }
         });
-    }
-
-    private ApiSetup() {
-
     }
 }

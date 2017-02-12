@@ -7,6 +7,8 @@ import com.mashape.unirest.http.exceptions.UnirestException;
 
 import java.util.concurrent.Future;
 
+import com.chadrc.services.api.ApiProperties;
+
 #foreach($import in $info.imports)
 import ${import};
 #end

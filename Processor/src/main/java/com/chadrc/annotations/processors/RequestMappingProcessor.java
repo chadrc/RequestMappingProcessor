@@ -79,7 +79,7 @@ public class RequestMappingProcessor extends AbstractProcessor {
                 String classPath = info.getPackageName().replace(".", "/");
                 File folder = new File("src/api/java/" + classPath);
                 if (!folder.exists()) {
-                    boolean created = folder.mkdir();
+                    boolean created = folder.mkdirs();
                     //System.out.println("Folder made: " + created);
                 }
                 File file = new File(folder.getAbsolutePath() + "/" + info.getName() + ".java");
@@ -90,6 +90,10 @@ public class RequestMappingProcessor extends AbstractProcessor {
 
                 FileOutputStream outputStream = null;
                 try {
+                    boolean created = file.createNewFile();
+                    if (!created) {
+                        throw new IOException("Couldn't create file: " + file.getAbsolutePath());
+                    }
                     outputStream = new FileOutputStream(file);
                     outputStream.write(writer.toString().getBytes());
                     outputStream.flush();
@@ -106,7 +110,7 @@ public class RequestMappingProcessor extends AbstractProcessor {
     private String AddClassToMap(Map<String, ClassInfo> classRoots, TypeElement element) {
         String className = element.getSimpleName().toString();
         if (!classRoots.containsKey(className)) {
-                classRoots.put(className, new ClassInfo(element, rootUrl));
+                classRoots.put(className, new ClassInfo(element));
         }
         return className;
     }
