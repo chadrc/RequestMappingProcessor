@@ -41,6 +41,7 @@ public class RequestMappingProcessor extends AbstractProcessor {
         VelocityEngine engine = new VelocityEngine();
         engine.setProperty(RuntimeConstants.RESOURCE_LOADER, "classpath");
         engine.setProperty("classpath.resource.loader.class", ClasspathResourceLoader.class.getName());
+        engine.setProperty("runtime.log.logsystem.class", "org.apache.velocity.runtime.log.NullLogChute");
         engine.init();
 
         for (TypeElement annotation : annotations) {
@@ -83,12 +84,12 @@ public class RequestMappingProcessor extends AbstractProcessor {
                 File folder = new File("src/api/java/" + classPath);
                 if (!folder.exists()) {
                     boolean created = folder.mkdir();
-                    System.out.println("Folder made: " + created);
+                    //System.out.println("Folder made: " + created);
                 }
                 File file = new File(folder.getAbsolutePath() + "/" + info.getName() + ".java");
                 if (file.exists()) {
                     boolean deleted = file.delete();
-                    System.out.println("File removed: " + deleted);
+                    //System.out.println("File removed: " + deleted);
                 }
 
                 FileOutputStream outputStream = null;
