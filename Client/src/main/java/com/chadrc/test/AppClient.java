@@ -10,6 +10,6 @@ public class AppClient {
 
     public static void main(String[] args) throws Exception {
         System.out.println("Root api url: " + ApiProperties.getRootUrl("com.chadrc.test.RootController"));
-        LoginResponse response = RootController.Login("chad", "password").getBody();
+//        LoginResponse response = RootController.Login("chad", "password").getBody();
     }
 }
