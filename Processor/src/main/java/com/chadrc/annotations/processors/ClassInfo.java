@@ -20,14 +20,14 @@ public class ClassInfo {
     private List<Method> methods = new ArrayList<>();
     private Collection<String> imports = new HashSet<>();
 
-    public ClassInfo(TypeElement element) {
+    public ClassInfo(TypeElement element, String rootUrl) {
         String className = element.getSimpleName().toString();
         int lastDot = element.getQualifiedName().toString().lastIndexOf(".");
         String packageName = element.getQualifiedName().toString().substring(0, lastDot);
-        String baseUrl = "";
+        String baseUrl = rootUrl;
         RequestMapping mapping = element.getAnnotation(RequestMapping.class);
         if (mapping != null && mapping.path().length > 0) {
-            baseUrl = mapping.path()[0];
+            baseUrl += mapping.path()[0];
         }
         this.setFields(className, packageName, baseUrl);
     }

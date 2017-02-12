@@ -32,6 +32,9 @@ import java.util.stream.Collectors;
 )
 @SupportedSourceVersion(SourceVersion.RELEASE_8)
 public class RequestMappingProcessor extends AbstractProcessor {
+
+    private String rootUrl = "http://localhost:8080";
+
     @Override
     public boolean process(Set<? extends TypeElement> annotations, RoundEnvironment roundEnv) {
 
@@ -98,36 +101,6 @@ public class RequestMappingProcessor extends AbstractProcessor {
                     e.printStackTrace();
                 }
             }
-
-//            for (String className : classRoots.keySet()) {
-//                ClassInfo info = classRoots.get(className);
-//
-//                VelocityContext context = new VelocityContext();
-//                context.put("info", info);
-//
-//                try {
-//                    Template template = engine.getTemplate("/APIClass.vm");
-//
-//                    StringWriter writer = new StringWriter();
-//                    template.merge(context, writer);
-//                    writer.flush();
-//                    writer.close();
-//
-//                    String classPath = info.getPackageName().replace(".", "/");
-//                    File file = new File("src/api/java/" + classPath + "/" +  info.getName() + ".java");
-//                    boolean success = file.getParentFile().mkdirs();
-//                    if (success) {
-//                        FileOutputStream outputStream = new FileOutputStream(file);
-//                        outputStream.write(writer.toString().getBytes());
-//                        outputStream.flush();
-//                        outputStream.close();
-//                    } else {
-//                        //throw new IOException("Could not create directories in path: " + file.getCanonicalPath());
-//                    }
-//                } catch (IOException exception) {
-//                    exception.printStackTrace();
-//                }
-//            }
         }
 
         return false;
@@ -136,7 +109,7 @@ public class RequestMappingProcessor extends AbstractProcessor {
     private String AddClassToMap(Map<String, ClassInfo> classRoots, TypeElement element) {
         String className = element.getSimpleName().toString();
         if (!classRoots.containsKey(className)) {
-                classRoots.put(className, new ClassInfo(element));
+                classRoots.put(className, new ClassInfo(element, rootUrl));
         }
         return className;
     }
