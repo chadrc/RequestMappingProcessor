@@ -56,7 +56,7 @@ public class Method {
         }
 
         RequestMapping mapping = element.getAnnotation(RequestMapping.class);
-        this.url = "";
+        this.url = "/";
         this.requestMethod = "get";
         if (mapping != null) {
             if (mapping.path().length > 0) {
